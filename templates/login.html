@@ -2,10 +2,66 @@
 <html>
 <head>
     <title>Login</title>
-    <link rel="stylesheet" type="text/css" href="styles.css">
+	    <style>
+    	#gradient1 {
+    		height: 800px;
+    		background-color: #F5F5F5;
+    		margin: 80px;
+    	}
+    
+    	.header {
+    		background: linear-gradient(to right, #00c3ff, #3f5efb);
+    		padding: 10px;
+    	}
+    
+    	.header a {
+    		color: #fff;
+    		font-weight: bolder;
+    		font-size: 170%;
+    		text-decoration: none;
+    		margin-right: 10px;
+    	}
+        .header a:hover {
+            color: #cfd8dc;
+        }
+    
+    	.container {
+    		border-style: solid;
+    		border-width: 2px;
+    		border-color: #3f5efb;
+    		background: #f5f5f5;
+    		padding: 20px;
+    		margin-top: 20px;
+    	}
+    
+    	h1 {
+    		color: #003366;
+    		font-family: Verdana, sans-serif;
+    		font-size: 2.5rem;
+    		margin-left: 15px;
+    	}
+    
+    	p {
+    		color: #003366;
+    		font-family: serif;
+    		font-size: 1.7rem;
+    		margin-left: 15px;
+    		margin-top: 10px;
+    		text-align: justify;
+    	}
+    
+    	hr {
+    		border-top: 1px solid #003366;
+    		margin: 20px 0;
+    	}
+    	</style>
 </head>
-<body>
-    <div class="container">
+<body id="gradient1">
+    <div class="header">
+      <a href="http://icram.pythonanywhere.com/">Home Page</a>
+      <a href="https://simplybudgetlife.epizy.com/index.html">Simple Budget - Home</a>
+    </div>
+        <div class="container">
         <h1>Login</h1>
         <form id="register-form" method="POST" action="/login">
             <label for="username">Username:</label>
