@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request, redirect, session
 import mysql.connector
-from datetime import date
+from datetime import date, timedelta
 
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'
@@ -196,6 +196,49 @@ def delete_weight():
             print("Error deleting weight entry:", error)
 
     return redirect('/login')
+
+@app.route('/sunday_report')
+def sunday_report():
+    if 'user_id' in session:
+        try:
+            # Connect to the MySQL database
+            connection = mysql.connector.connect(**db_config)
+            cursor = connection.cursor()
+
+            # Calculate the start and end dates of the previous week
+            today = date.today()
+            last_sunday = today - timedelta(days=(today.weekday() + 1) % 7)
+            previous_sunday = last_sunday - timedelta(days=7)
+            
+            # Retrieve weight entries for the previous week
+            select_query = "SELECT * FROM weight_entries WHERE user_id = %s AND date >= %s AND date <= %s"
+            data = (session['user_id'], previous_sunday, last_sunday)
+            cursor.execute(select_query, data)
+            weight_entries = cursor.fetchall()
+
+            # Calculate the sum of weights and count of entries
+            sum_of_weights = sum(entry[2] for entry in weight_entries)
+            count_of_entries = len(weight_entries)
+
+            # Check if today is Sunday
+            is_sunday = today.weekday() == 6
+
+            # Perform division only if today is Sunday and there is data
+            if is_sunday and count_of_entries > 0:
+                result = sum_of_weights / count_of_entries
+            else:
+                result = None
+
+            # Close the cursor and connection
+            cursor.close()
+            connection.close()
+
+            return render_template('sunday_report.html', result=result)
+        except mysql.connector.Error as error:
+            print("Error retrieving data from MySQL table:", error)
+            return redirect('/login')
+    else:
+        return redirect('/login')
 
 
 
