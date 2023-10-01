@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sunday Report</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            text-align: center;
+            margin-top: 50px;
+        }
+        h1 {
+            font-size: 24px;
+        }
+        p {
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Sunday Report</h1>
+        <p>
+            {% if result is not none %}
+                The average weight for the previous week was: {{ result|round(2) }} kg
+            {% else %}
+                No data available for the previous week.
+            {% endif %}
+        </p>
+        <p>
+            <a href="/dashboard">Back to Dashboard</a>
+        </p>
+    </div>
+</body>
+</html>
