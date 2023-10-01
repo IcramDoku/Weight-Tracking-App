@@ -3,9 +3,6 @@ import mysql.connector
 from datetime import date
 import datetime
 
-now = datetime.datetime.now()
-formatted_date = now.ctime()
-
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'
 
@@ -124,6 +121,8 @@ def dashboard():
 
             if request.method == 'POST':
                 weight = request.form['weight']
+                now = datetime.datetime.now()
+                formatted_date = now.ctime()
 
                 # Insert weight entry into the 'weight_entries' table
                 insert_query = "INSERT INTO weight_entries (user_id, weight, date) VALUES (%s, %s, %s)"
@@ -157,6 +156,8 @@ def record_weight():
             # Connect to the MySQL database
             connection = mysql.connector.connect(**db_config)
             cursor = connection.cursor()
+            now = datetime.datetime.now()
+            formatted_date = now.ctime()
 
             # Insert weight entry into the 'weight_entries' table
             insert_query = "INSERT INTO weight_entries (user_id, weight, date) VALUES (%s, %s, %s)"
