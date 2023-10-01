@@ -1,6 +1,10 @@
 from flask import Flask, render_template, request, redirect, session
 import mysql.connector
 from datetime import date
+import datetime
+
+now = datetime.datetime.now()
+formatted_date = now.ctime()
 
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'
@@ -123,7 +127,7 @@ def dashboard():
 
                 # Insert weight entry into the 'weight_entries' table
                 insert_query = "INSERT INTO weight_entries (user_id, weight, date) VALUES (%s, %s, %s)"
-                data = (session['user_id'], weight, date.today())
+                data = (session['user_id'], weight, formatted_date)
                 cursor.execute(insert_query, data)
                 connection.commit()
 
@@ -156,7 +160,7 @@ def record_weight():
 
             # Insert weight entry into the 'weight_entries' table
             insert_query = "INSERT INTO weight_entries (user_id, weight, date) VALUES (%s, %s, %s)"
-            data = (session['user_id'], weight, date.today())
+            data = (session['user_id'], weight, formatted_date)
             cursor.execute(insert_query, data)
             connection.commit()
 
