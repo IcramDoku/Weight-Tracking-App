@@ -197,22 +197,22 @@ def delete_weight():
 
     return redirect('/login')
 
-@app.route('/sunday_report')
-def sunday_report():
+def day_of_week_report(day_of_week):
     if 'user_id' in session:
         try:
             # Connect to the MySQL database
             connection = mysql.connector.connect(**db_config)
             cursor = connection.cursor()
 
-            # Calculate the start and end dates of the previous week
+            # Calculate the start and end dates of the previous week based on the specified day of the week
             today = date.today()
-            last_sunday = today - timedelta(days=(today.weekday() + 1) % 7)
-            previous_sunday = last_sunday - timedelta(days=7)
-            
-            # Retrieve weight entries for the previous week
+            days_until_target_day = (today.weekday() - day_of_week) % 7
+            start_date = today - timedelta(days=days_until_target_day)
+            end_date = start_date + timedelta(days=6)
+
+            # Retrieve weight entries for the specified week
             select_query = "SELECT * FROM weight_entries WHERE user_id = %s AND date >= %s AND date <= %s"
-            data = (session['user_id'], previous_sunday, last_sunday)
+            data = (session['user_id'], start_date, end_date)
             cursor.execute(select_query, data)
             weight_entries = cursor.fetchall()
 
@@ -220,11 +220,8 @@ def sunday_report():
             sum_of_weights = sum(entry[2] for entry in weight_entries)
             count_of_entries = len(weight_entries)
 
-            # Check if today is Sunday
-            is_sunday = today.weekday() == 6
-
-            # Perform division only if today is Sunday and there is data
-            if is_sunday and count_of_entries > 0:
+            # Perform division only if there is data
+            if count_of_entries > 0:
                 result = sum_of_weights / count_of_entries
             else:
                 result = None
@@ -239,6 +236,7 @@ def sunday_report():
             return redirect('/login')
     else:
         return redirect('/login')
+
 
 
 
