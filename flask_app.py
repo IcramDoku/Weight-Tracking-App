@@ -197,7 +197,7 @@ def delete_weight():
 
     return redirect('/login')
 
-@app.route('/weekly_report')
+@app.route('/sunday_report')
 def weekly_report():
     if 'user_id' in session:
         try:
