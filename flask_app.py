@@ -197,8 +197,8 @@ def delete_weight():
 
     return redirect('/login')
 
-@app.route('/sunday_report')
-def sunday_report():
+@app.route('/weekly_report')
+def weekly_report():
     if 'user_id' in session:
         try:
             # Connect to the MySQL database
@@ -208,7 +208,7 @@ def sunday_report():
             # Calculate the start and end dates of the previous week
             today = date.today()
             last_sunday = today - timedelta(days=(today.weekday() + 1) % 7)
-            previous_sunday = last_sunday - timedelta(days=7)
+            previous_sunday = last_sunday - timedelta(days=6)  # Adjust for a full week
 
             # Retrieve weight entries for the previous week
             select_query = "SELECT * FROM weight_entries WHERE user_id = %s AND date >= %s AND date <= %s"
@@ -220,11 +220,8 @@ def sunday_report():
             sum_of_weights = sum(entry[2] for entry in weight_entries)
             count_of_entries = len(weight_entries)
 
-            # Check if today is Sunday
-            is_sunday = today.weekday() == 6
-
-            # Perform division only if today is Sunday and there is data
-            if is_sunday and count_of_entries > 0:
+            # Perform division only if there is data
+            if count_of_entries > 0:
                 result = sum_of_weights / count_of_entries
             else:
                 result = None
@@ -233,12 +230,13 @@ def sunday_report():
             cursor.close()
             connection.close()
 
-            return render_template('sunday_report.html', result=result)
+            return render_template('weekly_report.html', result=result)
         except mysql.connector.Error as error:
             print("Error retrieving data from MySQL table:", error)
             return redirect('/login')
     else:
         return redirect('/login')
+
 
 
 if __name__ == '__main__':
