@@ -230,7 +230,7 @@ def weekly_report():
             cursor.close()
             connection.close()
 
-            return render_template('weekly_report.html', result=result)
+            return render_template('sunday_report.html', result=result)
         except mysql.connector.Error as error:
             print("Error retrieving data from MySQL table:", error)
             return redirect('/login')
