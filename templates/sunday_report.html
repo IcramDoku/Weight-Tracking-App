@@ -25,7 +25,7 @@
         <h1>Weekly Report</h1>
         <p>
             {% if result is not none %}
-                The average weight for the previous week was: {{ result|round(2) }} kg
+                The average weight for the previous week was: {{ result|round(2) }} lb
             {% else %}
                 No data available for the previous week.
             {% endif %}
